@@ -1,6 +1,7 @@
 package ch.asu.chaosdb.domain.chaos.content;
 
 import ch.asu.chaosdb.core.abstracts.AbstractEntity;
+import ch.asu.chaosdb.domain.chaos.entry.ChaosEntry;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -23,4 +24,8 @@ public class ChaosContent extends AbstractEntity {
 
     @Column(name = "mediaType", insertable = false, updatable = false)
     private String mediaType;
+
+    @ManyToOne
+    @JoinColumn(name = "chaos_entry_id")
+    private ChaosEntry entry;
 }

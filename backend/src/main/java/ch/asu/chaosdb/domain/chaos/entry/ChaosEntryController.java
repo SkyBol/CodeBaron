@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -28,6 +29,10 @@ public class ChaosEntryController extends AbstractController<ChaosEntry, ChaosEn
     }
 
     private final ChaosContentMapper chaosContentMapper;
+
+    /**
+     * Basic Entry Handling
+     */
 
     @GetMapping("/{id}")
     @Override
@@ -67,8 +72,25 @@ public class ChaosEntryController extends AbstractController<ChaosEntry, ChaosEn
                 .body(byteArrayResource);
     }
 
+    @GetMapping("/{id}/file/{number}")
+    public ResponseEntity<Resource> loadFileAsResource(@PathVariable UUID id, @PathVariable(name = "number") int chaosFileNumber) {
+        ByteArrayResource byteArrayResource = ((ChaosEntryService) service).loadFile(id, chaosFileNumber);
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                .contentLength(byteArrayResource.contentLength())
+                .body(byteArrayResource);
+    }
+
     @PostMapping("/upload")
     public ResponseEntity<ChaosEntryDTO> upload(@RequestParam("file") MultipartFile file) {
+        ChaosEntry chaosEntry = ((ChaosEntryService) service).uploadFile(file);
+
+        return ResponseEntity.ok(mapper.toDTO(chaosEntry));
+    }
+
+    @PostMapping("/upload/multiple")
+    public ResponseEntity<ChaosEntryDTO> upload(@RequestParam("file") List<MultipartFile> file) {
         ChaosEntry chaosEntry = ((ChaosEntryService) service).uploadFile(file);
 
         return ResponseEntity.ok(mapper.toDTO(chaosEntry));

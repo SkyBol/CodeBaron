@@ -14,6 +14,8 @@ import org.mapstruct.ReportingPolicy;
 @Log4j2
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public abstract class ChaosContentMapper implements AbstractMapper<ChaosContent, ChaosContentDTO> {
+    private static final String badMappingMessage = "Possible bad mapping Call for object: {} - {}";
+
     /**
      * TEXT
      */
@@ -43,7 +45,7 @@ public abstract class ChaosContentMapper implements AbstractMapper<ChaosContent,
         } else if (content instanceof ChaosFile file) {
             return toDTO(file);
         }
-        log.warn("Possible bad mapping Call for object: {} - {}", content.getId(), content.getMediaType());
+        log.warn(badMappingMessage, content.getId(), content.getMediaType());
         return toDTO(content);
     }
 
@@ -53,7 +55,7 @@ public abstract class ChaosContentMapper implements AbstractMapper<ChaosContent,
         } else if (dto instanceof ChaosFileDTO file) {
             return fromDTO(file);
         }
-        log.warn("Possible bad mapping Call for object: {} - {}", dto.getId(), dto.getMediaType());
+        log.warn(badMappingMessage, dto.getId(), dto.getMediaType());
         return fromDTO(dto);
     }
 }
