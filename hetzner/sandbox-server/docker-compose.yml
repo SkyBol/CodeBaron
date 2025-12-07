@@ -1,0 +1,39 @@
+version: "3.9"
+
+services:
+  nginx-proxy:
+    image: jwilder/nginx-proxy
+    container_name: nginx-proxy
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /etc/nginx/certs:/etc/nginx/certs:ro
+      - /etc/nginx/vhost.d
+      - /usr/share/nginx/html
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+
+  acme-companion:
+    image: nginxproxy/acme-companion
+    container_name: acme-companion
+    restart: always
+    depends_on:
+      - nginx-proxy
+    volumes:
+      - /etc/nginx/certs:/etc/nginx/certs
+      - /etc/nginx/vhost.d
+      - /usr/share/nginx/html
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+
+  fishx4-frontend:
+    image: asuzas/fishx4-frontend
+    container_name: fishx4-frontend
+    restart: always
+    environment:
+      # Needed for acme-companion Certificate Creation
+      VIRTUAL_HOST: fishx4.ch
+      LETSENCRYPT_HOST: fishx4.ch
+      LETSENCRYPT_EMAIL: sky@bollin.ch
+    volumes:
+      - ./app:/usr/share/nginx/html

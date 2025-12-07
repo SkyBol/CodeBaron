@@ -1,0 +1,52 @@
+#cloud-config
+users:
+  - name: fishx
+    groups: users, admin
+    sudo: "ALL=(ALL) NOPASSWD: ALL"
+    shell: /bin/bash
+    lock_passwd: false
+    ssh-authorized-keys:
+      - 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIP3QESLK3+dFuwdL1XXQV5pY0X8YHlqVPyaq+KovTozV sky@bollin.ch'
+
+chpasswd:
+  expire: false
+  users:
+    - {name: fishx, password: password1, type: text}
+
+package_update: true
+package_upgrade: true
+
+packages:
+  - fail2ban
+  - ufw
+
+write_files:
+  - path: /etc/ssh/sshd_config.d/ssh-hardening.conf
+    content: |
+      PermitRootLogin no
+      Port 2222
+      KbdInteractiveAuthentication no
+      ChallengeResponseAuthentication no
+      PasswordAuthentication no
+      MaxAuthTries 2
+      AllowTcpForwarding no
+      X11Forwarding no
+      AllowAgentForwarding no
+      AuthorizedKeysFile .ssh/authorized_keys
+      AllowUsers fishx
+  - path: /home/fishx/docker-compose.yaml
+    content: |
+      TODO
+
+runcmd:
+  - printf "[sshd]\nenabled = true\nport = ssh,2222\nbanaction = iptables-multiport\n" > /etc/fail2ban/jail.local
+  - systemctl enable fail2ban
+  - systemctl restart fail2ban
+  - ufw allow 2222/tcp
+  - ufw enable
+  - systemctl enable ssh
+  - systemctl restart ssh sshd
+  - curl https://get.docker.com | sh
+  - sudo usermod -aG docker fishx
+  - sudo apt install -y docker-compose-plugin
+  - docker compose -f /

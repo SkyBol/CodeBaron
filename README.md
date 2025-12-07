@@ -1,27 +1,17 @@
 # CodeBaron
-This is my 'über-app' that oversees all my other apps!
-Down below are some listed that are either implemented, are currently being implemented, or are planned:
+This is a Repo for the Overview of all Projects and 
 
-## ChaosDB
-This is a silly little App that helps organizing by being chaotig itself :D
+## Design
+### Domains
+fishx4.ch - bought - 15 CHF / Year
+librixus.ch - not bought yet - 15 CHF / Year
 
-It allows uploading different types of media, and labeling each upload with tags. No complicated settup, easy and fast usage.
+### Hetzner Servers
+#### Sandbox
+- Docker
+    - Nginx
+    - Postgres
+    - Fish Frontend
+    - Fish Backend
 
-
-### Expansion
-The following future functionalities are planned to be implemented into the domain, to enable faster document-collection of your favorite pass-times:
-- Youtube Video Downloader
-- Text Novel Downloader
-- Collection-Creation of media
-- ChatGPT-Prompt downloader / manager
-- Large Text Search algorithm
-
-
-# Website Structure
-/           Homepage or landing page
-/chaos      ChaosDB domain
-/access     For managing access-relevant stuff, like users
-
-## TODO's
-- User Management for Frontend
-- Abstract Card?
+#### Production
