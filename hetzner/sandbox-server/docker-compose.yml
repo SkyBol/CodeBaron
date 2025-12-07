@@ -1,5 +1,3 @@
-version: "3.9"
-
 services:
   nginx-proxy:
     image: jwilder/nginx-proxy
@@ -12,7 +10,7 @@ services:
       - /etc/nginx/certs:/etc/nginx/certs:ro
       - /etc/nginx/vhost.d
       - /usr/share/nginx/html
-      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
 
   acme-companion:
     image: nginxproxy/acme-companion
@@ -24,7 +22,7 @@ services:
       - /etc/nginx/certs:/etc/nginx/certs
       - /etc/nginx/vhost.d
       - /usr/share/nginx/html
-      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
 
   fishx4-frontend:
     image: asuzas/fishx4-frontend

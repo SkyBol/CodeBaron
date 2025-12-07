@@ -34,9 +34,6 @@ write_files:
       AllowAgentForwarding no
       AuthorizedKeysFile .ssh/authorized_keys
       AllowUsers fishx
-  - path: /home/fishx/docker-compose.yaml
-    content: |
-      TODO
 
 runcmd:
   - printf "[sshd]\nenabled = true\nport = ssh,2222\nbanaction = iptables-multiport\n" > /etc/fail2ban/jail.local
@@ -49,4 +46,5 @@ runcmd:
   - curl https://get.docker.com | sh
   - sudo usermod -aG docker fishx
   - sudo apt install -y docker-compose-plugin
-  - docker compose -f /
+  - curl https://raw.githubusercontent.com/SkyBol/CodeBaron/refs/heads/master/hetzner/sandbox-server/docker-compose.yml > /home/fishx/docker-compose.yaml
+  - sudo docker compose -f /home/fishx/docker-compose.yaml up -d
