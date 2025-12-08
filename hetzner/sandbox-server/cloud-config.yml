@@ -6,7 +6,7 @@ users:
     shell: /bin/bash
     lock_passwd: false
     ssh-authorized-keys:
-      - 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIP3QESLK3+dFuwdL1XXQV5pY0X8YHlqVPyaq+KovTozV sky@bollin.ch'
+      - 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPop4R4RiWmvJSxmhNpPpeOH78krf9yqolIGZz0XuLbB sandbox@server'
 
 chpasswd:
   expire: false
