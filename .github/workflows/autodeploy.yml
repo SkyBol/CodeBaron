@@ -11,13 +11,8 @@ env:
   REGISTRY: docker.io
 
 jobs:
-  build-and-push-frontend:
+  restart docker compose:
     runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        service: [backend, frontend]
-
     steps:
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v1.2.0
