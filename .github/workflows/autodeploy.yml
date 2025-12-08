@@ -11,7 +11,7 @@ env:
   REGISTRY: docker.io
 
 jobs:
-  restart docker compose:
+  restart-docker-compose:
     runs-on: ubuntu-latest
     steps:
       - name: Deploy via SSH
