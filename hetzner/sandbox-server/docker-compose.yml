@@ -1,16 +1,22 @@
+version: "3.9"
+
 services:
   nginx-proxy:
-    image: jwilder/nginx-proxy
+    image: nginxproxy/nginx-proxy
     container_name: nginx-proxy
     restart: always
     ports:
       - "80:80"
       - "443:443"
+    labels:
+      - com.github.nginx-proxy.nginx
     volumes:
+      # Zertifikate & Config (Host-Pfade kannst du bei Bedarf anpassen)
       - /etc/nginx/certs:/etc/nginx/certs:ro
-      - /etc/nginx/vhost.d
-      - /usr/share/nginx/html
-      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /etc/nginx/vhost.d:/etc/nginx/vhost.d
+      - /usr/share/nginx/html:/usr/share/nginx/html
+      # WICHTIG: Docker-Socket nach /tmp/docker.sock
+      - /var/run/docker.sock:/tmp/docker.sock:ro
 
   acme-companion:
     image: nginxproxy/acme-companion
@@ -18,20 +24,33 @@ services:
     restart: always
     depends_on:
       - nginx-proxy
+    environment:
+      NGINX_PROXY_CONTAINER: nginx-proxy
+      DEFAULT_EMAIL: sky@bollin.ch
     volumes:
       - /etc/nginx/certs:/etc/nginx/certs
-      - /etc/nginx/vhost.d
-      - /usr/share/nginx/html
+      - /etc/nginx/vhost.d:/etc/nginx/vhost.d
+      - /usr/share/nginx/html:/usr/share/nginx/html
       - /var/run/docker.sock:/var/run/docker.sock:ro
 
   fishx4-frontend:
     image: asuzas/fishx4-frontend
     container_name: fishx4-frontend
     restart: always
+    expose:
+      - "80"
     environment:
-      # Needed for acme-companion Certificate Creation
       VIRTUAL_HOST: fishx4.ch
       LETSENCRYPT_HOST: fishx4.ch
       LETSENCRYPT_EMAIL: sky@bollin.ch
-    volumes:
-      - ./app:/usr/share/nginx/html
+
+  project-ganz-frontend-sandbox:
+    image: asuzas/project-ganz-frontend
+    container_name: project-ganz-frontend-sandbox
+    restart: always
+    expose:
+      - "80"
+    environment:
+      VIRTUAL_HOST: sandbox.fishx4.ch
+      LETSENCRYPT_HOST: sandbox.fishx4.ch
+      LETSENCRYPT_EMAIL: sky@bollin.ch

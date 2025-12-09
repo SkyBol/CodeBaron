@@ -28,8 +28,8 @@ jobs:
             cd "$APP_PATH"
 
             docker pull asuzas/fishx4-frontend
-
             docker compose up -d
-
             docker image prune -f || true
 
+            sudo rm $APP_PATH/docker-compose.yaml
+            curl https://raw.githubusercontent.com/SkyBol/CodeBaron/refs/heads/master/hetzner/sandbox-server/docker-compose.yml > $APP_PATH/docker-compose.yaml
